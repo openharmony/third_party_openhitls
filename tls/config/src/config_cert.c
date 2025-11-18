@@ -888,3 +888,15 @@ int32_t HITLS_CFG_FreeKey(HITLS_Config *config, HITLS_CERT_Key *key)
     SAL_CERT_KeyFree(config->certMgrCtx, key);
     return HITLS_SUCCESS;
 }
+
+int32_t HITLS_CFG_CtrlSetVerifyParams(
+    HITLS_Config *config, HITLS_CERT_Store *store, uint32_t cmd, int64_t in, void *inArg)
+{
+    if (config == NULL) {
+        return HITLS_NULL_INPUT;
+    }
+    if (inArg == NULL) {
+        return SAL_CERT_CtrlVerifyParams(config, store, cmd, &in, NULL);
+    }
+    return SAL_CERT_CtrlVerifyParams(config, store, cmd, inArg, NULL);
+}

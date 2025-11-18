@@ -182,7 +182,7 @@ EXIT:
 void SDV_X509_CRL_PARSE_TIME_FUNC_TC001(char *path)
 {
     HITLS_X509_Crl *crl = NULL;
-    ASSERT_EQ(HITLS_X509_CrlParseFile(BSL_FORMAT_ASN1, path, &crl), HITLS_X509_ERR_CHECK_TAG);
+    ASSERT_EQ(HITLS_X509_CrlParseFile(BSL_FORMAT_ASN1, path, &crl), BSL_ASN1_FAIL);
 EXIT:
     HITLS_X509_CrlFree(crl);
 }

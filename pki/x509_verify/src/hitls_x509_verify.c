@@ -563,6 +563,7 @@ static int32_t HITLS_X509_CheckCertExtNode(void *ctx, HITLS_X509_ExtEntry *extNo
     (void)ctx;
     if (extNode->cid != BSL_CID_CE_KEYUSAGE && extNode->cid != BSL_CID_CE_BASICCONSTRAINTS &&
         extNode->cid != BSL_CID_CE_EXTKEYUSAGE && extNode->cid != BSL_CID_CE_SUBJECTALTNAME &&
+        extNode->cid != BSL_CID_CE_AUTHORITYKEYIDENTIFIER && extNode->cid != BSL_CID_CE_SUBJECTKEYIDENTIFIER &&
         extNode->critical == true) {
         BSL_ERR_PUSH_ERROR(HITLS_X509_ERR_PROCESS_CRITICALEXT);
         return HITLS_X509_ERR_PROCESS_CRITICALEXT; // not process critical ext
@@ -611,17 +612,18 @@ static int32_t X509_StoreCheckSignature(const BSL_Buffer *sm2UserId, const CRYPT
 #else
     (void)sm2UserId;
 #endif
+
     int32_t ret = HITLS_X509_CheckSignature(pubKey, rawData, rawDataLen, alg, signature);
-    if (ret != HITLS_PKI_SUCCESS) {
-        BSL_ERR_PUSH_ERROR(ret);
-        return ret;
-    }
 #ifdef HITLS_CRYPTO_SM2
     if (!isHasUserId) {
         alg->sm2UserId.data = NULL;
         alg->sm2UserId.dataLen = 0;
     }
 #endif
+    if (ret != HITLS_PKI_SUCCESS) {
+        BSL_ERR_PUSH_ERROR(ret);
+        return ret;
+    }
     return ret;
 }
 
